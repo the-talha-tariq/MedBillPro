@@ -1,0 +1,252 @@
+@using MedBillPro.Controllers
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-chart-line me-2"></i>Dashboard Overview
+            </h1>
+            <p class="text-muted">Welcome to MedBill Pro - Your Medical Billing Management System</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Patients</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPatients</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Claims</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalClaims</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-medical fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Revenue</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRevenue.ToString("C")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Claims</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.PendingClaims</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Claims Status Chart -->
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Claims Status Overview</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="claimsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Claims Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="small text-gray-500">Approved Claims</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @(Model.TotalClaims > 0 ? (Model.ApprovedClaims * 100 / Model.TotalClaims) : 0)%"></div>
+                        </div>
+                        <div class="small">@Model.ApprovedClaims of @Model.TotalClaims</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="small text-gray-500">Pending Claims</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.TotalClaims > 0 ? (Model.PendingClaims * 100 / Model.TotalClaims) : 0)%"></div>
+                        </div>
+                        <div class="small">@Model.PendingClaims of @Model.TotalClaims</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="small text-gray-500">Processing Claims</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: @(Model.TotalClaims > 0 ? (Model.ProcessingClaims * 100 / Model.TotalClaims) : 0)%"></div>
+                        </div>
+                        <div class="small">@Model.ProcessingClaims of @Model.TotalClaims</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="small text-gray-500">Denied Claims</div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: @(Model.TotalClaims > 0 ? (Model.DeniedClaims * 100 / Model.TotalClaims) : 0)%"></div>
+                        </div>
+                        <div class="small">@Model.DeniedClaims of @Model.TotalClaims</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Claims</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentClaims.Any())
+                    {
+                        @foreach (var claim in Model.RecentClaims)
+                        {
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-file-medical fa-2x text-gray-300"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="font-weight-bold">@claim.ClaimNumber</div>
+                                    <div class="text-gray-600">@claim.Patient.FullName</div>
+                                    <div class="text-xs text-gray-500">@claim.ServiceDate.ToString("MMM dd, yyyy")</div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
+                                </div>
+                            </div>
+                        }
+                        <div class="text-center">
+                            <a class="btn btn-primary btn-sm" asp-controller="Claims" asp-action="Index">View All Claims</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-file-medical fa-3x mb-3"></i>
+                            <p>No recent claims</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Payments</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentPayments.Any())
+                    {
+                        @foreach (var payment in Model.RecentPayments)
+                        {
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="font-weight-bold">@payment.Amount.ToString("C")</div>
+                                    <div class="text-gray-600">@payment.Claim.Patient.FullName</div>
+                                    <div class="text-xs text-gray-500">@payment.PaymentDate.ToString("MMM dd, yyyy")</div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <span class="status-badge status-@payment.Status.ToLower()">@payment.Status</span>
+                                </div>
+                            </div>
+                        }
+                        <div class="text-center">
+                            <a class="btn btn-primary btn-sm" asp-controller="Payments" asp-action="Index">View All Payments</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-dollar-sign fa-3x mb-3"></i>
+                            <p>No recent payments</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Claims Status Chart
+        const ctx = document.getElementById('claimsChart').getContext('2d');
+        const claimsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Approved', 'Pending', 'Processing', 'Denied'],
+                datasets: [{
+                    data: [@Model.ApprovedClaims, @Model.PendingClaims, @Model.ProcessingClaims, @Model.DeniedClaims],
+                    backgroundColor: [
+                        '#28a745',
+                        '#ffc107',
+                        '#17a2b8',
+                        '#dc3545'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+    </script>
+}

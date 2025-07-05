@@ -1,0 +1,127 @@
+@model Patient
+@{
+    ViewData["Title"] = $"Patient Details - {Model.FullName}";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-user me-2"></i>Patient Details
+                    </h6>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Personal Information</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Full Name:</strong></td>
+                                    <td>@Model.FullName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>@Model.Email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phone:</strong></td>
+                                    <td>@Model.Phone</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date of Birth:</strong></td>
+                                    <td>@Model.DateOfBirth.ToString("MMMM dd, yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address:</strong></td>
+                                    <td>@Model.Address<br>@Model.City, @Model.State @Model.ZipCode</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Insurance Information</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Provider:</strong></td>
+                                    <td>@Model.InsuranceProvider</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Policy Number:</strong></td>
+                                    <td>@Model.InsurancePolicyNumber</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Group Number:</strong></td>
+                                    <td>@Model.InsuranceGroupNumber</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Claims.Any())
+            {
+                <div class="card shadow mt-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-file-medical me-2"></i>Claims History
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Claim Number</th>
+                                        <th>Service Provider</th>
+                                        <th>Service Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var claim in Model.Claims.OrderByDescending(c => c.ServiceDate))
+                                    {
+                                        <tr>
+                                            <td>@claim.ClaimNumber</td>
+                                            <td>@claim.ServiceProvider</td>
+                                            <td>@claim.ServiceDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@claim.Amount.ToString("C")</td>
+                                            <td>
+                                                <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Claims" asp-action="Details" asp-route-id="@claim.Id" class="btn btn-sm btn-outline-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Patients
+                </a>
+                <a asp-controller="Claims" asp-action="Create" asp-route-patientId="@Model.Id" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Add New Claim
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

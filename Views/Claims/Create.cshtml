@@ -1,0 +1,116 @@
+@model Claim
+@{
+    ViewData["Title"] = "Submit New Claim";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-file-medical-alt me-2"></i>Submit New Insurance Claim
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ClaimNumber" class="form-label">Claim Number</label>
+                                <input asp-for="ClaimNumber" class="form-control" placeholder="Enter unique claim number" />
+                                <span asp-validation-for="ClaimNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PatientId" class="form-label">Patient</label>
+                                <select asp-for="PatientId" class="form-select" asp-items="ViewBag.PatientId">
+                                    <option value="">Select a patient...</option>
+                                </select>
+                                <span asp-validation-for="PatientId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ServiceProvider" class="form-label">Service Provider</label>
+                                <input asp-for="ServiceProvider" class="form-control" placeholder="Enter healthcare provider name" />
+                                <span asp-validation-for="ServiceProvider" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ServiceDate" class="form-label">Service Date</label>
+                                <input asp-for="ServiceDate" class="form-control" type="date" />
+                                <span asp-validation-for="ServiceDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Service Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the medical service provided"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Amount" class="form-label">Claim Amount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Amount" class="form-control" placeholder="0.00" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Status" class="form-label">Status</label>
+                                <select asp-for="Status" class="form-select" asp-items="ViewBag.StatusOptions">
+                                    <option value="">Select status...</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SubmittedDate" class="form-label">Submitted Date</label>
+                                <input asp-for="SubmittedDate" class="form-control" type="date" />
+                                <span asp-validation-for="SubmittedDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ProcessedDate" class="form-label">Processed Date (Optional)</label>
+                                <input asp-for="ProcessedDate" class="form-control" type="date" />
+                                <span asp-validation-for="ProcessedDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Additional Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any additional information or special notes"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-3">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Claims
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Submit Claim
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Set default submitted date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const submittedDateInput = document.getElementById('SubmittedDate');
+            if (!submittedDateInput.value) {
+                submittedDateInput.value = new Date().toISOString().split('T')[0];
+            }
+        });
+    </script>
+}

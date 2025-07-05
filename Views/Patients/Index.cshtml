@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Patient>
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-users me-2"></i>Patients Management
+        </h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Add New Patient
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Patient Directory</h6>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Date of Birth</th>
+                                <th>Insurance Provider</th>
+                                <th>Claims</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var patient in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-3">
+                                                <i class="fas fa-user text-white"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-bold">@patient.FullName</div>
+                                                <div class="text-xs text-gray-500">ID: @patient.Id</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@patient.Email</td>
+                                    <td>@patient.Phone</td>
+                                    <td>@patient.DateOfBirth.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <div class="font-weight-bold">@patient.InsuranceProvider</div>
+                                        <div class="text-xs text-gray-500">@patient.InsurancePolicyNumber</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">@patient.Claims.Count Claims</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-info" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
+                    <h4 class="text-gray-500">No Patients Found</h4>
+                    <p class="text-gray-400">Start by adding your first patient to the system.</p>
+                    <a asp-action="Create" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Add First Patient
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-sm {
+        width: 40px;
+        height: 40px;
+    }
+    .table th {
+        border-top: none;
+        font-weight: 600;
+        color: #5a5c69;
+        font-size: 0.875rem;
+    }
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+    .btn-group .btn:last-child {
+        margin-right: 0;
+    }
+</style>

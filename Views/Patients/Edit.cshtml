@@ -1,0 +1,116 @@
+@model Patient
+@{
+    ViewData["Title"] = $"Edit Patient - {Model.FullName}";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-user-edit me-2"></i>Edit Patient Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">First Name</label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">Last Name</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">Email Address</label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label">Phone Number</label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Address</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="City" class="form-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="State" class="form-label">State</label>
+                                <input asp-for="State" class="form-control" />
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="ZipCode" class="form-label">Zip Code</label>
+                                <input asp-for="ZipCode" class="form-control" />
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <h6 class="text-primary mb-3">Insurance Information</h6>
+
+                        <div class="mb-3">
+                            <label asp-for="InsuranceProvider" class="form-label">Insurance Provider</label>
+                            <input asp-for="InsuranceProvider" class="form-control" />
+                            <span asp-validation-for="InsuranceProvider" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="InsurancePolicyNumber" class="form-label">Policy Number</label>
+                                <input asp-for="InsurancePolicyNumber" class="form-control" />
+                                <span asp-validation-for="InsurancePolicyNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="InsuranceGroupNumber" class="form-label">Group Number</label>
+                                <input asp-for="InsuranceGroupNumber" class="form-control" />
+                                <span asp-validation-for="InsuranceGroupNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-3">
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Details
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
